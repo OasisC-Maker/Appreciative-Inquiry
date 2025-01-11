@@ -7,9 +7,9 @@
 
     <title>Appreciative Inquiry </title>
 
-    <link type="text/css" rel="stylesheet" href="lib/icomoon.css">
-    <script type="text/javascript" src="lib/player-0.0.11.min.js"></script>
-    <script type="text/javascript" src="lib/lzwcompress.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://oasisc-maker.github.io/Appreciative-Inquiry/scormcontent/lib/icomoon.css">
+    <script type="text/javascript" src="https://oasisc-maker.github.io/Appreciative-Inquiry/scormcontent/lib/player-0.0.11.min.js"></script>
+    <script type="text/javascript" src="https://oasisc-maker.github.io/Appreciative-Inquiry/scormcontent/lib/lzwcompress.js"></script>
 
     <!-- Resize Hack -->
     <script type="text/javascript">
@@ -291,7 +291,7 @@ function identity(value) {
 }
 
 function bookmark(id) {
-  var url = 'index.html#/lessons/' + id;
+  var url = 'https://oasisc-maker.github.io/Appreciative-Inquiry/scormcontent/index.html#/lessons/' + id;
 
   LMSProxy.SetBookmark(url, '');
 }
@@ -511,11 +511,11 @@ function reportScore(score) {
 }
 
 function resolvePath(path) {
-  return ('assets/').concat(path);
+  return ('https://oasisc-maker.github.io/Appreciative-Inquiry/scormcontent/assets/').concat(path);
 }
 
 function resolveFontPath(font) {
-  return ('lib/fonts/').concat(font.key.split('/').reverse()[0]);
+  return ('https://oasisc-maker.github.io/Appreciative-Inquiry/scormcontent/lib/fonts/').concat(font.key.split('/').reverse()[0]);
 }
 
 function setLessonProgress(lessonProgress) {
