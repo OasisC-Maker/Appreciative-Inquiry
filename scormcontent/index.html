@@ -42,7 +42,7 @@
                 link.onload = resolve
                 link.onerror = reject
                 link.rel = 'stylesheet'
-                link.href = 'lib/' + manifest['.css'][idx]
+                link.href = manifest['.css'][idx]
                 document.body.appendChild(link)
               }))
             }
