@@ -33,35 +33,66 @@
         const jsonp = {}
 
         function loadModule(manifest) {
-          const p = []
+  if (!manifest || typeof manifest !== 'object') {
+    throw new Error('Manifest is invalid or not provided.');
+  }
 
-          if (manifest['.css'] != null) {
-            for (var idx = 0; idx < manifest['.css'].length; idx++) {
-              p.push(new Promise((resolve, reject) => {
-                var link = document.createElement('link')
-                link.onload = resolve
-                link.onerror = reject
-                link.rel = 'stylesheet'
-                link.href = manifest['.css'][idx]
-                document.body.appendChild(link)
-              }))
-            }
-          }
+  if (manifest['.css'] && !Array.isArray(manifest['.css'])) {
+    throw new Error('Manifest ".css" property must be an array.');
+  }
 
-          if (manifest['.js'] != null) {
-            for (var idx = 0; idx < manifest['.js'].length; idx++) {
-              p.push(new Promise((resolve, reject) => {
-                var script = document.createElement('script')
-                script.onload = resolve
-                script.onerror = reject
-                script.src = manifest['.js'][idx]
-                document.body.appendChild(script)
-              }))
-            }
-          }
+  if (manifest['.js'] && !Array.isArray(manifest['.js'])) {
+    throw new Error('Manifest ".js" property must be an array.');
+  }
 
-          return Promise.all(p)
-        }
+  if (!document.body) {
+    throw new Error('document.body is not available. Ensure the DOM is fully loaded.');
+  }
+
+  const promises = [];
+
+  if (manifest['.css']) {
+    for (let idx = 0; idx < manifest['.css'].length; idx++) {
+      promises.push(
+        new Promise((resolve, reject) => {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = manifest['.css'][idx];
+
+          link.onload = resolve;
+          link.onerror = () => {
+            console.error('Failed to load CSS:', link.href);
+            reject(new Error(`Failed to load CSS file: ${link.href}`));
+          };
+
+          document.body.appendChild(link);
+        })
+      );
+    }
+  }
+
+  if (manifest['.js']) {
+    for (let idx = 0; idx < manifest['.js'].length; idx++) {
+      promises.push(
+        new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = manifest['.js'][idx];
+
+          script.onload = resolve;
+          script.onerror = () => {
+            console.error('Failed to load JS:', script.src);
+            reject(new Error(`Failed to load JS file: ${script.src}`));
+          };
+
+          document.body.appendChild(script);
+        })
+      );
+    }
+  }
+
+  return Promise.all(promises);
+}
+
 
         function deserialize(str) {
           const buffer = Uint8Array.from(atob(str), c => c.charCodeAt(0))
